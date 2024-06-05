@@ -37,8 +37,9 @@ input:focus{
 }
 
 a{
+ 
+  color:#303030;
   text-decoration: underline !important;
-  color:#303030
 }
 
 a:hover{
