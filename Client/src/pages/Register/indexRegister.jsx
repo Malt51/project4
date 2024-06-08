@@ -1,11 +1,27 @@
-import React from 'react';
-import { Button, Form } from "antd";
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Button, Form,message } from "antd";
+import { Link, useNavigate } from 'react-router-dom';
+import { RegisterUser } from '../../apis/users';
+import { antValidationError } from '../../helpers';
 
 function indexRegister() {
-  const onFinish = (values) => {
-    console.log("Great", values);
-  }
+  const navigate = useNavigate();
+  const onFinish = async(values) => {
+    try {
+      const response = await RegisterUser(values);
+      message.success(response.message);
+      navigate("/login");
+    } catch (error) {
+      message.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+
+  }, []);
 
 
   return (
@@ -36,18 +52,21 @@ function indexRegister() {
             
             <Form.Item
               label="Name"
-              name="name">
+              name="name"
+              rules={antValidationError}>
               <input />
             </Form.Item>
 
 
             <Form.Item
               label="Email"
-              name="email">
+              name="email"
+              rules={antValidationError}>
               <input />
             </Form.Item>
 
-            <Form.Item label="Password" name="password">
+            <Form.Item label="Password" name="password"
+            rules={antValidationError}>
               <input type="password" />
             </Form.Item>
 
