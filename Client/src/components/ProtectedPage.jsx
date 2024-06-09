@@ -36,7 +36,7 @@ function ProtectedPage({ children }) {
     <div>
       <div className="flex justify-between items-center bg-primary p-5">
         <span className='font-semibold text-yellow-500 text-2xl cursor-pointer'
-        onClick={()=> navigate("/")}>Mad Gaming Review</span>
+          onClick={() => navigate("/")}>Mad Movie Review</span>
 
         <div className='bg-white rounded px-5 py-2 flex gap-2 items-center'>
           <i className="ri-user-line"></i>
@@ -57,10 +57,9 @@ function ProtectedPage({ children }) {
 
       </div>
 
-      <div className='p-5'>
+      {user && <div className='p-5'>
         {children}
-
-      </div>
+      </div>}
 
     </div>
   );

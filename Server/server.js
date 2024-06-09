@@ -6,8 +6,10 @@ app.use(express.json());
 
 
 const usersRoute = require('./routes/usersRoute');
+const artistsRoute = require('./routes/artistsRoute');
 
 app.use('/api/users',usersRoute);
+app.use('/api/artists', artistsRoute);
 
 
 

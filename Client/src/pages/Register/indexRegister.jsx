@@ -36,10 +36,10 @@ function indexRegister() {
        <div>
 
         <h1 className="text-5xl text-yellow-600 font-semibold">
-          Welcome to Mad Gaming Review
+          Welcome to Mad Movie Review
         </h1>
         <span className='text-md text-gray-300 mt-2'>
-          Daily Gaming Review,Ratings and recommendation
+          Daily Movie Review,Ratings and recommendation
         </span>
        </div>
 
