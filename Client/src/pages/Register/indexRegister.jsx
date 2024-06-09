@@ -3,15 +3,21 @@ import { Button, Form,message } from "antd";
 import { Link, useNavigate } from 'react-router-dom';
 import { RegisterUser } from '../../apis/users';
 import { antValidationError } from '../../helpers';
+import { useDispatch } from 'react-redux';
+import { SetLoading } from '../../redux/loadersSlice';
 
 function indexRegister() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const onFinish = async(values) => {
     try {
+      dispatch(SetLoading(true));
       const response = await RegisterUser(values);
+      dispatch(SetLoading(false));
       message.success(response.message);
       navigate("/login");
     } catch (error) {
+      dispatch(SetLoading(false));
       message.error(error.message);
     }
   };

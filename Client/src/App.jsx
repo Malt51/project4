@@ -3,14 +3,19 @@ import Home from "./pages/Home/indexHome";
 import Login from "./pages/Login/indexLogin";
 import Register from "./pages/Register/indexRegister";
 import ProtectedPage from "./components/ProtectedPage";
+import Profile from "./pages/Profile";
+import Spinner from "./components/Spinner";
+import { useSelector } from "react-redux";
 
 function App() {
-
+ const {loading} = useSelector((state) => state.loaders);
   return (
     <>
+       {loading && <Spinner />}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedPage><Home /></ProtectedPage>}/>
+          <Route path="/profile" element={<ProtectedPage><Profile /></ProtectedPage>}/>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
