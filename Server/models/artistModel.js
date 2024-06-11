@@ -16,10 +16,18 @@ const artistSchema = new mongoose.Schema({
         required: true,
     },
 
-    profilepic: {
-        type: String,
-        required: true,
+    // profilepic: {
+    //     type: String,
+    //     required: true,
+    // },
+
+     profilepic: {
+        type: [],
+        required: false,
     },
+
+
+
 
     debutYear: {
         type: Number,
@@ -31,18 +39,20 @@ const artistSchema = new mongoose.Schema({
         required: true,
     },
 
-    proffession: {
-        type: String,
-        required: true,
-    },
+    // proffession: {
+    //     type: String,
+    //     required: true,
+    // },
 
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-        required: true,
-    },
+    // createdBy: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "users",
+    //     required: true,
+    // },
 
 
 }, { timestamps: true })
 
 module.exports = mongoose.model("artists", artistSchema);
+
+
