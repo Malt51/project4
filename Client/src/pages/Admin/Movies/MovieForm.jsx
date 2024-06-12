@@ -4,10 +4,13 @@ import { antValidationError } from '../../../helpers'
 import { useDispatch } from 'react-redux';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
+import { AddMovie } from '../../../apis/movies';
+import { useNavigate } from 'react-router-dom'
 
 function MovieForm() {
     const [artists = [], setArtists] = React.useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const getArtists = async () => {
@@ -27,8 +30,18 @@ function MovieForm() {
         }
     };
 
-    const onFinish = (values) =>{
-        console.log(values)
+    const onFinish = async (values) =>{
+        try {
+            dispatch(SetLoading(true));
+            const response = await AddMovie(values);
+            message.success(response.message);
+            dispatch(SetLoading(false));
+            navigate("/admin/movies");
+            
+        } catch (error) {
+           dispatch(SetLoading(false))
+           message.error(error.message) 
+        }
     }
 
     React.useEffect(() => {
@@ -73,12 +86,12 @@ function MovieForm() {
 
                             <Form.Item label="Heroine" name="heroine"
                                 rules={antValidationError}>
-                                <Select options={artists} />
+                                <Select options={artists} showSearch />
                             </Form.Item>
 
                             <Form.Item label="Director" name="director"
                                 rules={antValidationError}>
-                                <Select options={artists} />
+                                <Select options={artists} showSearch />
                             </Form.Item>
 
 
@@ -150,7 +163,8 @@ function MovieForm() {
 
                             <Form.Item label="Trailer" name="trailer"
                                 rules={antValidationError}>
-                                <Select options={artists} />
+                                {/* <Select options={artists} /> */}
+                                <input type = "text"/>
                             </Form.Item>
 
                         </div>
@@ -162,7 +176,11 @@ function MovieForm() {
                         </Form.Item>
 
                         <div className="flex justify-end gap 5">
-                            <Button>Cancel</Button>
+                            <Button
+                            onClick={()=>{
+                                navigate("/admin")
+                            }}
+                            >Cancel</Button>
                             <Button htmlType='submit' type='primary'>
                                 Save
                             </Button>

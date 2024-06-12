@@ -4,14 +4,23 @@ import Movies from './Movies'
 import Artists from './Artists'
 import Users from './Users'
 import { useSelector } from "react-redux"
+import { useNavigate } from "react-router-dom"
 
 function Admin() {
+    const [activeTab, setActiveTab] = React.useState("1")
     const { user } = useSelector((state) => state.users);
+    const navigate = useNavigate();
    //Deny Access unless admin
     return (
         <div>
             {user?.isAdmin ? (
-            <Tabs>
+            <Tabs defaultActiveKey="1"
+            activeKey={activeTab}
+            onChange={(key)=>{
+             setActiveTab(key);
+             navigate(`/admin?tab${key}`);
+
+            }}>
 
                 <Tabs.TabPane tab="Movies" key="1">
                     <Movies />
