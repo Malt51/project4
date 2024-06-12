@@ -16,18 +16,15 @@ const artistSchema = new mongoose.Schema({
         required: true,
     },
 
-    // profilepic: {
-    //     type: String,
-    //     required: true,
-    // },
-
-     profilepic: {
-        type: [],
-        required: false,
+    profilePic: {
+        type: String,
+        required: true,
     },
 
-
-
+    //  profilepic: {
+    //     type: [],
+    //     required: false,
+    // },
 
     debutYear: {
         type: Number,
@@ -39,10 +36,19 @@ const artistSchema = new mongoose.Schema({
         required: true,
     },
 
-    // proffession: {
-    //     type: String,
-    //     required: true,
-    // },
+    profession: {
+        type: String,
+        required: true,
+    },
+
+    images: {
+        type: [],
+        required: false,
+      },
+
+
+
+
 
     // createdBy: {
     //     type: mongoose.Schema.Types.ObjectId,
