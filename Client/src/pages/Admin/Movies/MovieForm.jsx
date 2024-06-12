@@ -1,33 +1,39 @@
-import { Button, Form, Select, Tabs } from 'antd'
+import { Button, Form, message, Select, Tabs } from 'antd'
 import React from 'react'
 import { antValidationError } from '../../../helpers'
+import { useDispatch } from 'react-redux';
+import { SetLoading } from '../../../redux/loadersSlice';
+import { GetAllArtist } from '../../../apis/artists';
 
 function MovieForm() {
-
-    const tempOptions = [
-        {
-            value: "1",
-            label: "1",
-        },
-
-        {
-            value: "2",
-            label: "2",
-        },
+    const [artists = [], setArtists] = React.useState([]);
+    const dispatch = useDispatch();
 
 
-        {
-            value: "3",
-            label: "3",
-        },
+    const getArtists = async () => {
+        try {
+            dispatch(SetLoading(true));
+            const response = await GetAllArtist();
+            setArtists(response.data.map((artist) => ({
+                value: artist._id,
+                label: artist.name,
 
 
-    ];
+            })));
+            dispatch(SetLoading(false));
+        } catch (error) {
+            message.error(error.message);
+            dispatch(SetLoading(false));
+        }
+    };
 
+    const onFinish = (values) =>{
+        console.log(values)
+    }
 
-
-
-
+    React.useEffect(() => {
+        getArtists();
+    }, []);
 
     return (
         <div>
@@ -36,7 +42,8 @@ function MovieForm() {
             </h1>
             <Tabs>
                 <Tabs.TabPane tab="Details" key="1">
-                    <Form layout="vertical" className='flex flex-col gap-5'>
+                    <Form layout="vertical" className='flex flex-col gap-5'
+                    onFinish = {onFinish}>
                         <div className='grid grid-cols-3 gap-5'>
                             <Form.Item label="Name" name="name"
                                 rules={antValidationError}
@@ -61,17 +68,17 @@ function MovieForm() {
                         <div className='grid grid-cols-3 gap-5'>
                             <Form.Item label="Hero" name="hero"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={artists} showSearch />
                             </Form.Item>
 
                             <Form.Item label="Heroine" name="heroine"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={artists} />
                             </Form.Item>
 
                             <Form.Item label="Director" name="director"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={artists} />
                             </Form.Item>
 
 
@@ -86,17 +93,64 @@ function MovieForm() {
                         <div className='grid grid-cols-3 gap-5'>
                             <Form.Item label="Genre" name="genre"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={[
+                                    {
+                                        label: "Action",
+                                        value: "action",
+                                    },
+
+                                    {
+                                        label: "Comedy",
+                                        value: "comedy",
+                                    },
+
+                                    {
+                                        label: "Drama",
+                                        value: "drama",
+                                    },
+
+                                    {
+                                        label: "Horror",
+                                        value: "horror",
+                                    },
+
+                                    {
+                                        label: "Romance",
+                                        value: "romance",
+                                    },
+
+
+
+
+                                ]} />
                             </Form.Item>
 
                             <Form.Item label="Language" name="language"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={[
+
+                                    {
+                                        label: "English",
+                                        value: "english",
+                                    },
+
+                                    {
+                                        label : "Japanese",
+                                        value : "japanese",
+                                     },
+    
+                                     {
+                                        label : "French",
+                                        value : "french",
+                                     },
+
+
+                                ]} />
                             </Form.Item>
 
                             <Form.Item label="Trailer" name="trailer"
                                 rules={antValidationError}>
-                                <Select options={tempOptions} />
+                                <Select options={artists} />
                             </Form.Item>
 
                         </div>
@@ -104,7 +158,7 @@ function MovieForm() {
 
                         <Form.Item label="Cast & Crew" name="cast">
 
-                            <Select options={tempOptions} />
+                            <Select options={artists} mode = "tags" />
                         </Form.Item>
 
                         <div className="flex justify-end gap 5">
