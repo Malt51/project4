@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
             .populate("heroine")
             .populate("director")
             .populate("createdBy")
-        res.status(200).json({ movies, success: true })
+        res.status(200).json({ data: movies, success: true })
     } catch (error) {
         res.status(500).json({ message: error.message, success: false })
     }
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res) => {
             .populate("heroine")
             .populate("director")
             .populate("createdBy")
-        res.status(200).json({ movies, success: true })
+        res.status(200).json({data: movies, success: true })
     } catch (error) {
         res.status(500).json({ message: error.message, success: false })
     }

@@ -37,10 +37,10 @@ function indexLogin() {
         <div>
 
           <h1 className="text-5xl text-yellow-600 font-semibold">
-            Welcome to Mad Movie Review
+            Welcome to Mad Movie Collection
           </h1>
           <span className='text-md text-gray-300 mt-2'>
-            Daily Movie Review,Ratings and recommendation
+          Store your favorite Movie Collection
           </span>
         </div>
 

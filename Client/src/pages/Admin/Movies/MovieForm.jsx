@@ -1,16 +1,19 @@
 import { Button, Form, message, Select, Tabs } from 'antd'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { antValidationError } from '../../../helpers'
 import { useDispatch } from 'react-redux';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
-import { AddMovie } from '../../../apis/movies';
-import { useNavigate } from 'react-router-dom'
+import { AddMovie, GetMovieById } from '../../../apis/movies';
+import { useNavigate, useParams } from 'react-router-dom'
+import Movies from '.';
 
 function MovieForm() {
     const [artists = [], setArtists] = React.useState([]);
+    const [movie, setMovie] = React.useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const params = useParams();
 
 
     const getArtists = async () => {
@@ -30,161 +33,187 @@ function MovieForm() {
         }
     };
 
-    const onFinish = async (values) =>{
+    const getMovie = async (id) => {
+        try {
+            dispatch(SetLoading(true));
+            const response = await GetMovieById(id);
+            setMovie(response.data)
+            dispatch(SetLoading(false));
+        } catch (error) {
+            message.error(error.message);
+            dispatch(SetLoading(false));
+        }
+    };
+
+
+
+    const onFinish = async (values) => {
         try {
             dispatch(SetLoading(true));
             const response = await AddMovie(values);
             message.success(response.message);
             dispatch(SetLoading(false));
             navigate("/admin/movies");
-            
+
         } catch (error) {
-           dispatch(SetLoading(false))
-           message.error(error.message) 
+            dispatch(SetLoading(false))
+            message.error(error.message)
         }
     }
+
+
+
 
     React.useEffect(() => {
         getArtists();
     }, []);
 
+    useEffect(() => {
+        if (params?.id) {
+            getMovie(params.id);
+        }
+
+    }, [])
+
     return (
-        <div>
-            <h1 className='text-gray-600 text-xl font-semibold'>
-                Add Movies
-            </h1>
-            <Tabs>
-                <Tabs.TabPane tab="Details" key="1">
-                    <Form layout="vertical" className='flex flex-col gap-5'
-                    onFinish = {onFinish}>
-                        <div className='grid grid-cols-3 gap-5'>
-                            <Form.Item label="Name" name="name"
-                                rules={antValidationError}
-                                className='col-span-2'>
+        (movie || !params.id) && (
+            <div>
+                <h1 className='text-gray-600 text-xl font-semibold'>
+                    Add Movies
+                </h1>
+                <Tabs>
+                    <Tabs.TabPane tab="Details" key="1">
+                        <Form layout="vertical" className='flex flex-col gap-5'
+                            onFinish={onFinish}
+                            initialValues={movie}>
+                            <div className='grid grid-cols-3 gap-5'>
+                                <Form.Item label="Name" name="name"
+                                    rules={antValidationError}
+                                    className='col-span-2'>
 
-                                <input />
-                            </Form.Item>
-                            <Form.Item label="Release Date"
-                                name="releaseDate"
+                                    <input />
+                                </Form.Item>
+                                <Form.Item label="Release Date"
+                                    name="releaseDate"
+                                    rules={antValidationError}>
+                                    <input type="date" />
+                                </Form.Item>
+
+
+
+                            </div>
+                            <Form.Item label="Plot" name="plot"
                                 rules={antValidationError}>
-                                <input type="date" />
+                                <textarea />
                             </Form.Item>
 
+                            <div className='grid grid-cols-3 gap-5'>
+                                <Form.Item label="Hero" name="hero"
+                                    rules={antValidationError}>
+                                    <Select options={artists} showSearch />
+                                </Form.Item>
+
+                                <Form.Item label="Heroine" name="heroine"
+                                    rules={antValidationError}>
+                                    <Select options={artists} showSearch />
+                                </Form.Item>
+
+                                <Form.Item label="Director" name="director"
+                                    rules={antValidationError}>
+                                    <Select options={artists} showSearch />
+                                </Form.Item>
 
 
-                        </div>
-                        <Form.Item label="Plot" name="plot"
-                            rules={antValidationError}>
-                            <textarea />
-                        </Form.Item>
 
-                        <div className='grid grid-cols-3 gap-5'>
-                            <Form.Item label="Hero" name="hero"
-                                rules={antValidationError}>
-                                <Select options={artists} showSearch />
+
+
+
+
+
+                            </div>
+
+                            <div className='grid grid-cols-3 gap-5'>
+                                <Form.Item label="Genre" name="genre"
+                                    rules={antValidationError}>
+                                    <Select options={[
+                                        {
+                                            label: "Action",
+                                            value: "action",
+                                        },
+
+                                        {
+                                            label: "Comedy",
+                                            value: "comedy",
+                                        },
+
+                                        {
+                                            label: "Drama",
+                                            value: "drama",
+                                        },
+
+                                        {
+                                            label: "Horror",
+                                            value: "horror",
+                                        },
+
+                                        {
+                                            label: "Romance",
+                                            value: "romance",
+                                        },
+
+
+
+
+                                    ]} />
+                                </Form.Item>
+
+                                <Form.Item label="Language" name="language"
+                                    rules={antValidationError}>
+                                    <Select options={[
+
+                                        {
+                                            label: "English",
+                                            value: "english",
+                                        },
+
+                                        {
+                                            label: "Japanese",
+                                            value: "japanese",
+                                        },
+
+                                        {
+                                            label: "French",
+                                            value: "french",
+                                        },
+
+
+                                    ]} />
+                                </Form.Item>
+
+                                <Form.Item label="Trailer" name="trailer"
+                                    rules={antValidationError}>
+                                    {/* <Select options={artists} /> */}
+                                    <input type="text" />
+                                </Form.Item>
+
+                            </div>
+
+
+                            <Form.Item label="Cast & Crew" name="cast">
+
+                                <Select options={artists} mode="tags" />
                             </Form.Item>
 
-                            <Form.Item label="Heroine" name="heroine"
-                                rules={antValidationError}>
-                                <Select options={artists} showSearch />
-                            </Form.Item>
-
-                            <Form.Item label="Director" name="director"
-                                rules={antValidationError}>
-                                <Select options={artists} showSearch />
-                            </Form.Item>
-
-
-
-
-
-
-
-
-                        </div>
-
-                        <div className='grid grid-cols-3 gap-5'>
-                            <Form.Item label="Genre" name="genre"
-                                rules={antValidationError}>
-                                <Select options={[
-                                    {
-                                        label: "Action",
-                                        value: "action",
-                                    },
-
-                                    {
-                                        label: "Comedy",
-                                        value: "comedy",
-                                    },
-
-                                    {
-                                        label: "Drama",
-                                        value: "drama",
-                                    },
-
-                                    {
-                                        label: "Horror",
-                                        value: "horror",
-                                    },
-
-                                    {
-                                        label: "Romance",
-                                        value: "romance",
-                                    },
-
-
-
-
-                                ]} />
-                            </Form.Item>
-
-                            <Form.Item label="Language" name="language"
-                                rules={antValidationError}>
-                                <Select options={[
-
-                                    {
-                                        label: "English",
-                                        value: "english",
-                                    },
-
-                                    {
-                                        label : "Japanese",
-                                        value : "japanese",
-                                     },
-    
-                                     {
-                                        label : "French",
-                                        value : "french",
-                                     },
-
-
-                                ]} />
-                            </Form.Item>
-
-                            <Form.Item label="Trailer" name="trailer"
-                                rules={antValidationError}>
-                                {/* <Select options={artists} /> */}
-                                <input type = "text"/>
-                            </Form.Item>
-
-                        </div>
-
-
-                        <Form.Item label="Cast & Crew" name="cast">
-
-                            <Select options={artists} mode = "tags" />
-                        </Form.Item>
-
-                        <div className="flex justify-end gap 5">
-                            <Button
-                            onClick={()=>{
-                                navigate("/admin")
-                            }}
-                            >Cancel</Button>
-                            <Button htmlType='submit' type='primary'>
-                                Save
-                            </Button>
-                        </div>
+                            <div className="flex justify-end gap 5">
+                                <Button
+                                    onClick={() => {
+                                        navigate("/admin")
+                                    }}
+                                >Cancel</Button>
+                                <Button htmlType='submit' type='primary'>
+                                    Save
+                                </Button>
+                            </div>
 
 
 
@@ -193,12 +222,15 @@ function MovieForm() {
 
 
 
-                    </Form>
-                </Tabs.TabPane>
-                <Tabs.TabPane tab="Posters" key="2"></Tabs.TabPane>
-            </Tabs>
-        </div>
+                        </Form>
+                    </Tabs.TabPane>
+                    <Tabs.TabPane tab="Posters" key="2"></Tabs.TabPane>
+                </Tabs>
+
+            </div>
+        )
     )
+
 }
 
 export default MovieForm

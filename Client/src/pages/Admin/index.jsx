@@ -13,7 +13,7 @@ function Admin() {
    //Deny Access unless admin
     return (
         <div>
-            {user?.isAdmin ? (
+            
             <Tabs defaultActiveKey="1"
             activeKey={activeTab}
             onChange={(key)=>{
@@ -32,10 +32,10 @@ function Admin() {
                     <Users />
                 </Tabs.TabPane>
             </Tabs>
-            ) : (
+             {/* : (
                 <div>Access not Authorised </div>
-            )}
-        
+            )
+         */}
         </div>
 
     );
