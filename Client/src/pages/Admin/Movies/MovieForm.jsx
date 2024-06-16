@@ -6,11 +6,12 @@ import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
 import { AddMovie, GetMovieById } from '../../../apis/movies';
 import { useNavigate, useParams } from 'react-router-dom'
+import moment from 'moment';
 
 
 function MovieForm() {
     const [artists = [], setArtists] = useState([]);
-    const [movie, setMovie] = useState({});
+    const [movie, setMovie] = useState();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
@@ -37,6 +38,9 @@ function MovieForm() {
         try {
             dispatch(SetLoading(true));
             const response = await GetMovieById(id);
+            response.data.releaseDate = moment(response.data.releaseDate).format(
+                "YYYY-MM-DD"
+              );
             setMovie(response.data)
             dispatch(SetLoading(false));
         } catch (error) {
@@ -98,7 +102,7 @@ function MovieForm() {
 
 
     return (
-        (movie || !params.id) && 
+        (movie || !params.id) && (
             <div>
                 <h1 className='text-gray-600 text-xl font-semibold'>
                     Add Movies
@@ -251,7 +255,7 @@ function MovieForm() {
 
             </div>
         )
-    
+    )
 
 }
 

@@ -3,7 +3,7 @@ import apiRequest from ".";
 export const AddMovie = async (data) => {
     return await apiRequest({
         method: "POST",
-        endPoint: "/api/movies",
+        endPoint: "/api/movies/add",
         payload: data,
     });
 }

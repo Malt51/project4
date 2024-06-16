@@ -16,7 +16,7 @@ router.post("/add", authMiddleware, async (req, res) => {
 
 });
 
-//get all movie
+//get all the movie
 
 router.get("/", async (req, res) => {
     try {
@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
 });
 
 
-//get movie with id
+//get movie by id
 router.get("/:id", async (req, res) => {
     
     try {
@@ -43,7 +43,6 @@ router.get("/:id", async (req, res) => {
             .populate("heroine")
             .populate("director")
             .populate("createdBy")
-
         res.status(200).json({data: movies, success: true })
     } catch (error) {
         res.status(500).json({ message: error.message, success: false })
