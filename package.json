@@ -2,7 +2,7 @@
   "name": "project4",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "build": "cd Server && npm install && cd ../client && npm install && npm run build",
     "start": "node Server/server.js",
