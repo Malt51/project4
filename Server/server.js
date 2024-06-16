@@ -16,9 +16,19 @@ app.use('/api/artists', artistsRoute);
 app.use('/api/images', imagesRoute);
 app.use('/api/movies', moviesRoute);
 
-
-
-
 const port = process.env.PORT || 5000;
+
+
+//For Render deployment
+const path = require("path");
+__dirname = path.resolve();
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static(path.join(__dirname, "/Client/dist")));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "Client", "dist", "index.html"));
+  });
+}
+
 
 app.listen(port, () => console.log(`Server started on port ${port}`));

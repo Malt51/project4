@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, message, Table } from "antd"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
@@ -7,8 +7,9 @@ import { SetLoading } from '../../../redux/loadersSlice';
 import { getDateFormat } from '../../../helpers';
 
 
+
 function Movies() {
-  const [movies, setMovies] = React.useState([])
+  const [movies, setMovies] = useState([])
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ function Movies() {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     getMovies();
 
   }, []);

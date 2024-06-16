@@ -1,16 +1,16 @@
 import { Button, Form, message, Select, Tabs } from 'antd'
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { antValidationError } from '../../../helpers'
 import { useDispatch } from 'react-redux';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
 import { AddMovie, GetMovieById } from '../../../apis/movies';
 import { useNavigate, useParams } from 'react-router-dom'
-import Movies from '.';
+
 
 function MovieForm() {
-    const [artists = [], setArtists] = React.useState([]);
-    const [movie, setMovie] = React.useState({});
+    const [artists = [], setArtists] = useState([]);
+    const [movie, setMovie] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const params = useParams();
@@ -53,7 +53,7 @@ function MovieForm() {
             const response = await AddMovie(values);
             message.success(response.message);
             dispatch(SetLoading(false));
-            navigate("/admin/movies");
+            navigate("/admin");
 
         } catch (error) {
             dispatch(SetLoading(false))
@@ -62,21 +62,43 @@ function MovieForm() {
     }
 
 
+    const fetchData = useCallback(async()=> {
+        console.log("params",params)
+        if(params.id)
+        {console.log("Checking param")
+           getMovie(params.id)
+          console.log("get param.id")
+        }
+        console.log("moviedata",movie)
+      }, [])
+
+    
 
 
-    React.useEffect(() => {
+
+    useEffect(() => {
         getArtists();
     }, []);
 
-    useEffect(() => {
-        if (params?.id) {
-            getMovie(params.id);
-        }
+    // useEffect(() => {
+    //     if (params?.id) {
+    //         getMovie(params.id);
+    //     }
 
-    }, [])
+    // }, [])
+
+
+    useEffect(()=>{
+        fetchData()
+    
+      },[fetchData])
+
+
+
+
 
     return (
-        (movie || !params.id) && (
+        (movie || !params.id) && 
             <div>
                 <h1 className='text-gray-600 text-xl font-semibold'>
                     Add Movies
@@ -229,7 +251,7 @@ function MovieForm() {
 
             </div>
         )
-    )
+    
 
 }
 
