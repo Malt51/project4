@@ -4,7 +4,7 @@ const authMiddleware = require('../middlewares/authMiddleware')
 
 //Add new movie
 
-router.post("/", authMiddleware, async (req, res) => {
+router.post("/add", authMiddleware, async (req, res) => {
     try {
         req.body.createdBy = req.userId;
         await Movie.create(req.body);
@@ -36,12 +36,14 @@ router.get("/", async (req, res) => {
 
 //get movie with id
 router.get("/:id", async (req, res) => {
+    
     try {
-        const movies = await Movie.find()
+        const movies = await Movie.findById(req.params.id)
             .populate("hero")
             .populate("heroine")
             .populate("director")
             .populate("createdBy")
+
         res.status(200).json({data: movies, success: true })
     } catch (error) {
         res.status(500).json({ message: error.message, success: false })
