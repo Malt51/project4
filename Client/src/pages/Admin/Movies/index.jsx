@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Button, message, Table } from "antd"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
-import { GetAllMovies } from '../../../apis/movies';
+import { DeleteMovie, GetAllMovies } from '../../../apis/movies';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { getDateFormat } from '../../../helpers';
 
@@ -31,8 +31,20 @@ function Movies() {
   }, []);
 
   const deleteMovie = async (id) => {
+    try {
+      dispatch(SetLoading(true));
+      const response = await DeleteMovie(id);
+      message.success(response.message);
+      getMovies();
+      dispatch(SetLoading(false));
+    } catch (error) {
+      message.error(error.message);
+      dispatch(SetLoading(false));
+    }
+  };
 
-  }
+
+  
 
   const columns = [
     {

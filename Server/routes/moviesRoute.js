@@ -42,6 +42,7 @@ router.get("/:id", async (req, res) => {
             .populate("hero")
             .populate("heroine")
             .populate("director")
+            .populate("cast")
             .populate("createdBy")
         res.status(200).json({data: movies, success: true })
     } catch (error) {

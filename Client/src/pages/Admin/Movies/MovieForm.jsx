@@ -4,7 +4,7 @@ import { antValidationError } from '../../../helpers'
 import { useDispatch } from 'react-redux';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
-import { AddMovie, GetMovieById } from '../../../apis/movies';
+import { AddMovie, GetMovieById, UpdateMovie } from '../../../apis/movies';
 import { useNavigate, useParams } from 'react-router-dom'
 import moment from 'moment';
 
@@ -38,10 +38,17 @@ function MovieForm() {
         try {
             dispatch(SetLoading(true));
             const response = await GetMovieById(id);
-            response.data.releaseDate = moment(response.data.releaseDate).format(
-                "YYYY-MM-DD"
-              );
-            setMovie(response.data)
+            if (response.data) {
+                const movieData = response.data;
+                movieData.releaseDate = moment(movieData.releaseDate).format("YYYY-MM-DD");
+                movieData.cast = movieData.cast?.map((artist) => artist._id) || [];
+                movieData.hero = movieData.hero?._id || null;
+                movieData.heroine = movieData.heroine?._id || null;
+                movieData.director = movieData.director?._id || null;
+                setMovie(movieData);
+            } else {
+                setMovie(null);
+            }
             dispatch(SetLoading(false));
         } catch (error) {
             message.error(error.message);
@@ -54,7 +61,12 @@ function MovieForm() {
     const onFinish = async (values) => {
         try {
             dispatch(SetLoading(true));
-            const response = await AddMovie(values);
+            let response;
+            if (params?.id) {
+              response = await UpdateMovie(params.id, values);
+            } else {
+              response = await AddMovie(values);
+            }
             message.success(response.message);
             dispatch(SetLoading(false));
             navigate("/admin");
@@ -66,38 +78,17 @@ function MovieForm() {
     }
 
 
-    const fetchData = useCallback(async()=> {
-        console.log("params",params)
-        if(params.id)
-        {console.log("Checking param")
-           getMovie(params.id)
-          console.log("get param.id")
-        }
-        console.log("moviedata",movie)
-      }, [])
-
-    
-
-
 
     useEffect(() => {
         getArtists();
     }, []);
 
-    // useEffect(() => {
-    //     if (params?.id) {
-    //         getMovie(params.id);
-    //     }
+    useEffect(() => {
+        if (params?.id) {
+            getMovie(params.id);
+        }
 
-    // }, [])
-
-
-    useEffect(()=>{
-        fetchData()
-    
-      },[fetchData])
-
-
+    }, [])
 
 
 
@@ -105,7 +96,7 @@ function MovieForm() {
         (movie || !params.id) && (
             <div>
                 <h1 className='text-gray-600 text-xl font-semibold'>
-                    Add Movies
+                    {params?.id ? "Edit Movie Detail" : "Add New Movie"}
                 </h1>
                 <Tabs>
                     <Tabs.TabPane tab="Details" key="1">
