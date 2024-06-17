@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, message, Table } from "antd"
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux';
@@ -44,26 +44,16 @@ function Movies() {
   };
 
 
-  
-
   const columns = [
-    {
-      title: "Movie",
-      dataIndex: "name",
-      render: (text, record) =>{
-        const imageUrl = record?.posters?.[0] || "";
-        return <img src={imageUrl} alt="" className='w-20 h-20 rounded'/>
-    }
-    },
 
     {
-      title: "Name",
+      title: "Movie Name",
       dataIndex: "name",
     },
     {
       title: "Release Date",
       dataIndex: "releaseDate",
-      render : (text) => getDateFormat(text)
+      render: (text) => getDateFormat(text)
     },
 
     {

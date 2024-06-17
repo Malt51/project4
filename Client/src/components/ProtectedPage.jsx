@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect} from 'react'
 import { GetCurrentUser } from '../apis/users';
 import { message } from 'antd';
 import { useNavigate } from 'react-router-dom';

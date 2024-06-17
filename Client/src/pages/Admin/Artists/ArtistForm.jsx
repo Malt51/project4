@@ -1,4 +1,3 @@
-import React from 'react'
 import { Modal, Form, Input, message, Tabs, Upload, Button } from 'antd'
 import { antValidationError } from '../../../helpers';
 import { useDispatch } from "react-redux"
@@ -10,14 +9,12 @@ import { UploadImage } from '../../../apis/image';
 
 function ArtistForm({ showArtistForm, setShowArtistForm, selectedArtist, reloadData }) {
     const dispatch = useDispatch();
-    const [selectedTab, setSelectedTab] = React.useState("1");
+    const [selectedTab, setSelectedTab] = useState("1");
     const [form] = Form.useForm();
-    const [file, setFile] = React.useState(null);
-
-
-    // if(selectedArtist.dob){
-    //     selectedArtist.dob = moment(selectedArtist.dob).format("YYYY-MM-DD")
-    // }
+    const [file, setFile] = useState(null);
+    if (selectedArtist) {
+        selectedArtist.dob = moment(selectedArtist.dob).format("YYYY-MM-DD");
+      }
     const onFinish = async (values) => {
         try {
             dispatch(SetLoading(true));
@@ -114,9 +111,6 @@ function ArtistForm({ showArtistForm, setShowArtistForm, selectedArtist, reloadD
                                         <option value="Actress">Actress</option>
                                         <option value="Director">Director</option>
                                         <option value="Producer">Producer</option>
-                                        <option value="Music Director">Music Director</option>
-                                        <option value="Singer">Singer</option>
-                                        <option value="Lyrist">Lyrist</option>
                                         <option value="Cinemotograpgy">Cinemotography</option>
                                         <option value="Editor">Editor</option>
 

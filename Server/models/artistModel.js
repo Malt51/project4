@@ -21,10 +21,7 @@ const artistSchema = new mongoose.Schema({
         required: true,
     },
 
-    //  profilepic: {
-    //     type: [],
-    //     required: false,
-    // },
+    
 
     debutYear: {
         type: Number,
@@ -45,8 +42,6 @@ const artistSchema = new mongoose.Schema({
         type: [],
         required: false,
       },
-
-
 
 
 

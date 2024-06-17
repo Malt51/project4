@@ -1,22 +1,18 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Button, message, Table } from 'antd';
 import ArtistForm from './ArtistForm';
 import { useDispatch } from 'react-redux';
 import { SetLoading } from '../../../redux/loadersSlice';
 import { GetAllArtist } from '../../../apis/artists';
 import { useEffect, useState } from "react";
-import { getDateFormat, getDateTimeFormat } from "../../../helpers";
-import PropTypes from 'prop-types';
+import { getDateFormat,} from "../../../helpers";
 import { DeleteArtist} from "../../../apis/artists";
 
 
 function Artists() {
-  const [artists, setArtists] = React.useState([]);
+  const [artists, setArtists] = useState([]);
   const dispatch = useDispatch();
-  const [showArtistForm, setShowArtistForm] = React.useState(false);
-  const navigate = useNavigate();
-  const[selectedArtist, setSelectedArtist] = React.useState(null);
+  const [showArtistForm, setShowArtistForm] = useState(false);
+  const[selectedArtist, setSelectedArtist] = useState(null);
 
  
   const fetchArtists = async () => {
@@ -111,7 +107,7 @@ const deleteArtist= async(id)=>{
     }
   ]
 
-  React.useEffect(() => {
+  useEffect(() => {
     fetchArtists();
   }, []);
 
