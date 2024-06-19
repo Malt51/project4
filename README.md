@@ -16,7 +16,7 @@ To start Client
  - CD to Client and npm run dev
 
 To Start Server
--CD to Server and Npx nodemon Server/server.js
+- CD to Server and Npx nodemon Server/server.js
 
 
   
